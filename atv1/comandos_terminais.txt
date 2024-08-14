@@ -1,0 +1,7 @@
+sbatch python.slurm
+sbatch c.slurm
+sbatch c_paralelismo.slurm
+
+g++  main.cpp -o main_c 
+
+g++  main_paralelismo.cpp -o main_c_paralelismo 
