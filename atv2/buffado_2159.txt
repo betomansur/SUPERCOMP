@@ -1,0 +1,1 @@
+A tarefa levou 0.230595 segundos para ser executada
