@@ -1,0 +1,4 @@
+Número total de palavras: 69
+Número total de linhas: 6
+Número médio de palavras por linha: 11.5
+Palavra mais frequente: in (3 vezes)
