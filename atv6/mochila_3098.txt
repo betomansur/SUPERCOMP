@@ -7,7 +7,7 @@ Peso ocupado: 2 Kg, Valor alcançado: 156 dinheiros
 Tempo de execução: 0.00000136 segundos
 
 Arquivo: entrada3.txt
-Peso ocupado: 100 Kg, Valor alcançado: 236 dinheiros
+Peso ocupado: 95 Kg, Valor alcançado: 236 dinheiros
 Tempo de execução: 0.00000180 segundos
 
 Arquivo: entrada4.txt
