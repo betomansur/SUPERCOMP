@@ -1,0 +1,9 @@
+mpic++ convolucao.cpp -o convolucao_basicao
+mpic++ -O1 convolucao.cpp -o convolucao_O1
+mpic++ -O2 convolucao.cpp -o convolucao_O2
+mpic++ -O3 -march=native convolucao.cpp -o convolucao_O3
+
+sbatch basicao.slurm
+sbatch O1.slurm
+sbatch O2.slurm
+sbatch O3.slurm

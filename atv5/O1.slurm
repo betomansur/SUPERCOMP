@@ -1,0 +1,17 @@
+#!/bin/bash
+#SBATCH --job-name=convolucao_buffado             # Nome do job
+#SBATCH --output=O1_%j.txt          # Nome do arquivo de saída
+#SBATCH --ntasks=4                              # Número de tarefas (4 processos)
+#SBATCH --cpus-per-task=4                       # Número de threads por tarefa (2 threads por processo)
+#SBATCH --mem=4096  # Aumente para 4 GB por nó
+#SBATCH --time=00:10:00                         # Tempo máximo de execução (10 minutos)
+#SBATCH --partition=espec                      # fila do cluster a ser utilizada
+
+# Exporta a variável de ambiente para configurar o número de threads OpenMP
+export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
+
+
+# Executa o programa usando MPI e OpenMP
+./convolucao_O1
+
+
