@@ -1,0 +1,7 @@
+Busca Exaustiva - Arquivo: entrada1.txt
+Valor alcançado: 601 dinheiros em 0.77989553 segundos
+
+Busca Exaustiva - Arquivo: entrada2.txt
+Valor alcançado: 870 dinheiros em 49.58325709 segundos
+
+slurmstepd-compute00: error: *** JOB 3408 ON compute00 CANCELLED AT 2024-09-02T15:51:14 DUE TO TIME LIMIT ***

@@ -1,0 +1,7 @@
+g++ -o mochila_exaustiva mochila_1.cpp
+g++ -o mochila_embaralhada mochila_2.cpp
+g++ -o mochila_probabilistica mochila_3.cpp
+
+sbatch slurm_1.slurm
+sbatch slurm_2.slurm
+sbatch slurm_3.slurm
