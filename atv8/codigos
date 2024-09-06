@@ -1,0 +1,7 @@
+g++ mochila_cheia.cpp -o mochila_cheia
+g++ mochila_sub.cpp -o mochila_sub
+g++ mochila_hill.cpp -o mochila_hill
+
+sbatch mochila_cheia.slurm
+sbatch mochila_sub.slurm
+sbatch mochila_hill.slurm
