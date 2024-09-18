@@ -1,0 +1,838 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "gpuType": "T4",
+      "authorship_tag": "ABX9TyOSwLQEfGuLeRX5VTTeWg65",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    },
+    "accelerator": "GPU"
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/betomansur/SUPERCOMP/blob/main/aula%2010e11\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "IGEU9XcMO6Z2",
+        "outputId": "889e4625-da5b-47f7-9975-642920476bb8"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Fri Sep 13 12:12:08 2024       \n",
+            "+---------------------------------------------------------------------------------------+\n",
+            "| NVIDIA-SMI 535.104.05             Driver Version: 535.104.05   CUDA Version: 12.2     |\n",
+            "|-----------------------------------------+----------------------+----------------------+\n",
+            "| GPU  Name                 Persistence-M | Bus-Id        Disp.A | Volatile Uncorr. ECC |\n",
+            "| Fan  Temp   Perf          Pwr:Usage/Cap |         Memory-Usage | GPU-Util  Compute M. |\n",
+            "|                                         |                      |               MIG M. |\n",
+            "|=========================================+======================+======================|\n",
+            "|   0  Tesla T4                       Off | 00000000:00:04.0 Off |                    0 |\n",
+            "| N/A   64C    P8              11W /  70W |      0MiB / 15360MiB |      0%      Default |\n",
+            "|                                         |                      |                  N/A |\n",
+            "+-----------------------------------------+----------------------+----------------------+\n",
+            "                                                                                         \n",
+            "+---------------------------------------------------------------------------------------+\n",
+            "| Processes:                                                                            |\n",
+            "|  GPU   GI   CI        PID   Type   Process name                            GPU Memory |\n",
+            "|        ID   ID                                                             Usage      |\n",
+            "|=======================================================================================|\n",
+            "|  No running processes found                                                           |\n",
+            "+---------------------------------------------------------------------------------------+\n"
+          ]
+        }
+      ],
+      "source": [
+        "!nvidia-smi\n"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "%%writefile exemplo1.cu\n",
+        "#include <thrust/device_vector.h> // Inclui a biblioteca para vetores na GPU (device)\n",
+        "#include <thrust/host_vector.h>   // Inclui a biblioteca para vetores na CPU (host)\n",
+        "#include <iostream>               // Biblioteca padrão para entrada e saída de dados\n",
+        "\n",
+        "int main() {\n",
+        "    // Cria um vetor na CPU (host) com 5 elementos, todos inicializados com 0\n",
+        "    thrust::host_vector<double> host(5, 0);\n",
+        "    host[4] = 35; // Altera o último elemento do vetor para 35\n",
+        "\n",
+        "    /* Os dados do vetor 'host' são copiados para a GPU,\n",
+        "       criando um vetor equivalente na GPU (device) */\n",
+        "    thrust::device_vector<double> dev(host);\n",
+        "\n",
+        "    /* Altera o vetor na CPU, mas não afeta o vetor na GPU,\n",
+        "       pois a cópia já foi feita anteriormente */\n",
+        "    host[2] = 12; // Altera o terceiro elemento do vetor na CPU para 12\n",
+        "\n",
+        "    // Exibe os elementos do vetor na CPU\n",
+        "    printf(\"Host vector: \");\n",
+        "    for (auto i = host.begin(); i != host.end(); i++) {\n",
+        "        std::cout << *i << \" \"; // Acesso rápido aos elementos na CPU\n",
+        "    }\n",
+        "    printf(\"\\n\");\n",
+        "\n",
+        "    // Exibe os elementos do vetor na GPU\n",
+        "    printf(\"Device vector: \");\n",
+        "    for (auto i = dev.begin(); i != dev.end(); i++) {\n",
+        "        std::cout << *i << \" \"; // Acesso aos elementos na GPU é lento, pois os dados estão na GPU\n",
+        "    }\n",
+        "    printf(\"\\n\");\n",
+        "}"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "SUV_xN2pPxQh",
+        "outputId": "e3dda3e2-01cc-4bf7-ed9f-604c9b575686"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Writing exemplo1.cu\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "!nvcc -arch=sm_75 -std=c++14 exemplo1.cu -o exemplo1\n"
+      ],
+      "metadata": {
+        "id": "EUBHbN-lPz4D"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "!./exemplo1\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "_Wkdmt3IP8WU",
+        "outputId": "9f290deb-910b-40ee-f5ae-463a10b2fbb0"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Host vector: 0 0 12 0 35 \n",
+            "Device vector: 0 0 0 0 35 \n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "%%writefile stocks.cu\n",
+        "#include <thrust/device_vector.h>   // Inclui a biblioteca Thrust para vetores na GPU\n",
+        "#include <thrust/host_vector.h>     // Inclui a biblioteca Thrust para vetores na CPU\n",
+        "#include <iostream>                 // Biblioteca padrão para entrada e saída de dados\n",
+        "#include <chrono>                   // Biblioteca para medir o tempo de execução do código\n",
+        "using namespace std;\n",
+        "\n",
+        "int main() {\n",
+        "    int n = 2518;                   // Define o tamanho do vetor (2518 elementos)\n",
+        "    double value = 0.0;             // Variável auxiliar para armazenar o valor lido da entrada\n",
+        "    std::chrono::duration<double> diff; // Variável para armazenar a diferença de tempo calculada\n",
+        "\n",
+        "    // Marca o início da medição do tempo de leitura dos dados\n",
+        "    auto leitura_i = std::chrono::steady_clock::now();\n",
+        "\n",
+        "    // Cria um vetor na CPU (host_vector) com n elementos, todos inicializados com 0\n",
+        "    thrust::host_vector<double> host(n, 0);\n",
+        "\n",
+        "    // Loop para ler n valores da entrada padrão e armazená-los no vetor host\n",
+        "    for (int i = 0; i < n; i++) {\n",
+        "        cin >> value;              // Lê um valor da entrada padrão\n",
+        "        host[i] = value;           // Armazena o valor lido no vetor host\n",
+        "    }\n",
+        "\n",
+        "    // Marca o fim da medição do tempo de leitura dos dados\n",
+        "    auto leitura_f = std::chrono::steady_clock::now();\n",
+        "\n",
+        "    // Calcula o tempo gasto na leitura dos dados\n",
+        "    diff = leitura_f - leitura_i;\n",
+        "\n",
+        "    // Exibe o tempo de leitura em segundos\n",
+        "    cout << \"Tempo de LEITURA (em segundos)  \" << diff.count() << endl;\n",
+        "\n",
+        "    // Marca o início da medição do tempo de cópia dos dados da CPU para a GPU\n",
+        "    auto copia_i = std::chrono::steady_clock::now();\n",
+        "\n",
+        "    // Cria um vetor na GPU (device_vector) copiando os dados do vetor host da CPU\n",
+        "    thrust::device_vector<double> dev(host);\n",
+        "\n",
+        "    // Marca o fim da medição do tempo de cópia dos dados\n",
+        "    auto copia_f = std::chrono::steady_clock::now();\n",
+        "\n",
+        "    // Calcula o tempo gasto na cópia dos dados para a GPU\n",
+        "    diff = copia_f - copia_i;\n",
+        "\n",
+        "    // Exibe o tempo de cópia em segundos\n",
+        "    cout << \"Tempo de CÓPIA (em segundos)  \" << diff.count() << endl;\n",
+        "\n",
+        "    return 0;\n",
+        "}"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "vgxx0C6dTTXP",
+        "outputId": "2c7b45db-a3a6-419a-bd1d-38cac0ce914c"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Writing stocks.cu\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "!nvcc -arch=sm_70 -std=c++14 stocks.cu -o stocks\n"
+      ],
+      "metadata": {
+        "id": "2lnmAQUST6BI"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "!./stocks < stocks_supercomp.txt\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "j4qgznbKT-2J",
+        "outputId": "98ac867d-e20f-4389-c536-fb86d22d45b5"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Tempo de LEITURA (em segundos)  0.000538711\n",
+            "Tempo de CÓPIA (em segundos)  0.216944\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "%%writefile reduções_com_thurst.cu\n",
+        "#include <thrust/device_vector.h>\n",
+        "#include <thrust/sequence.h>  // Certifique-se de incluir este cabeçalho\n",
+        "#include <thrust/reduce.h>    // Para usar thrust::reduce\n",
+        "#include <iostream>\n",
+        "\n",
+        "int main() {\n",
+        "    // Criando um vetor na GPU com 5 elementos: {10, 20, 30, 40, 50}\n",
+        "    thrust::device_vector<int> vec_gpu(5);\n",
+        "    thrust::sequence(vec_gpu.begin(), vec_gpu.end(), 10, 10);\n",
+        "\n",
+        "    // Calculando a soma dos elementos\n",
+        "    int soma = thrust::reduce(vec_gpu.begin(), vec_gpu.end(), 0, thrust::plus<int>());\n",
+        "\n",
+        "    std::cout << \"Soma dos elementos: \" << soma << std::endl; // Saída: 150\n",
+        "\n",
+        "    return 0;\n",
+        "}"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "-9bz6itLVY9r",
+        "outputId": "83e3089e-1e25-45de-fec1-1be24fa41cf8"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Overwriting reduções_com_thurst.cu\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "!nvcc -arch=sm_70 -std=c++14  reduções_com_thurst.cu -o reduções_com_thurst\n"
+      ],
+      "metadata": {
+        "id": "gDpCf-sNWIaH"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "!./reduções_com_thurst < stocks_supercomp.txt\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "Ey3I_k_NWKqH",
+        "outputId": "30476724-4b11-4f33-ee82-6ecf18e82a77"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Soma dos elementos: 150\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "%%writefile stocks_transfer.cu\n",
+        "#include <thrust/host_vector.h>\n",
+        "#include <thrust/device_vector.h>\n",
+        "#include <iostream>\n",
+        "#include <chrono>\n",
+        "\n",
+        "int main() {\n",
+        "    // Vetor no host (CPU)\n",
+        "    thrust::host_vector<float> host_data;\n",
+        "    float price;\n",
+        "\n",
+        "    // Ler os dados do arquivo de entrada redirecionado (e.g., stocks-google.txt)\n",
+        "    while (std::cin >> price) {\n",
+        "        host_data.push_back(price);\n",
+        "    }\n",
+        "\n",
+        "    std::cout << \"Dados lidos: \" << host_data.size() << \" registros.\" << std::endl;\n",
+        "\n",
+        "    // Medir o tempo de cópia dos dados para a GPU\n",
+        "    auto start = std::chrono::high_resolution_clock::now();\n",
+        "\n",
+        "    // Criar um device_vector e copiar os dados do host_vector para ele\n",
+        "    thrust::device_vector<float> device_data = host_data;\n",
+        "\n",
+        "    auto end = std::chrono::high_resolution_clock::now();\n",
+        "    std::chrono::duration<double> duration = end - start;\n",
+        "\n",
+        "    // Imprimir o tempo de cópia\n",
+        "    std::cout << \"Tempo de cópia para a GPU: \" << duration.count() << \" segundos.\" << std::endl;\n",
+        "\n",
+        "    return 0;\n",
+        "}\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "sSK050Y2XcwJ",
+        "outputId": "01fb18be-2b45-495d-b00b-cac5ea19ec78"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Overwriting stocks_transfer.cu\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "!nvcc -arch=sm_70 -std=c++14 stocks_transfer.cu -o stocks_transfer\n"
+      ],
+      "metadata": {
+        "id": "2Sf4uaofXmHZ"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "!./stocks_transfer < stocks_supercomp.txt\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "D__eXuEXXuhY",
+        "outputId": "78fc1a14-0fd9-41a1-86cb-92aad73b423c"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Dados lidos: 389 registros.\n",
+            "Tempo de cópia para a GPU: 0.192757 segundos.\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "%%writefile stocks_reductions.cu\n",
+        "#include <thrust/host_vector.h>\n",
+        "#include <thrust/device_vector.h>\n",
+        "#include <thrust/reduce.h>\n",
+        "#include <thrust/extrema.h>\n",
+        "#include <iostream>\n",
+        "#include <chrono>\n",
+        "\n",
+        "int main() {\n",
+        "    // Vetor no host (CPU)\n",
+        "    thrust::host_vector<float> host_data;\n",
+        "    float price;\n",
+        "\n",
+        "    // Ler os dados do arquivo de entrada redirecionado (e.g., stocks_supercomp)\n",
+        "    while (std::cin >> price) {\n",
+        "        host_data.push_back(price);\n",
+        "    }\n",
+        "\n",
+        "    std::cout << \"Dados lidos: \" << host_data.size() << \" registros.\" << std::endl;\n",
+        "\n",
+        "    // Transferir os dados para a GPU\n",
+        "    thrust::device_vector<float> device_data = host_data;\n",
+        "\n",
+        "    // Cálculo de médias e extremos\n",
+        "    int total_days = device_data.size();\n",
+        "    int last_year_days = std::min(365, total_days);  // Últimos 365 dias\n",
+        "\n",
+        "    // Calcular a média total\n",
+        "    float sum_total = thrust::reduce(device_data.begin(), device_data.end(), 0.0f);\n",
+        "    float average_total = sum_total / total_days;\n",
+        "\n",
+        "    // Calcular a média dos últimos 365 dias\n",
+        "    float sum_last_year = thrust::reduce(device_data.end() - last_year_days, device_data.end(), 0.0f);\n",
+        "    float average_last_year = sum_last_year / last_year_days;\n",
+        "\n",
+        "    // Encontrar o maior e o menor preço do período total\n",
+        "    auto minmax_total = thrust::minmax_element(device_data.begin(), device_data.end());\n",
+        "    float min_price_total = *minmax_total.first;\n",
+        "    float max_price_total = *minmax_total.second;\n",
+        "\n",
+        "    // Encontrar o maior e o menor preço do último ano\n",
+        "    auto minmax_last_year = thrust::minmax_element(device_data.end() - last_year_days, device_data.end());\n",
+        "    float min_price_last_year = *minmax_last_year.first;\n",
+        "    float max_price_last_year = *minmax_last_year.second;\n",
+        "\n",
+        "    // Exibir os resultados\n",
+        "    std::cout << \"Média total dos preços: \" << average_total << std::endl;\n",
+        "    std::cout << \"Média dos últimos 365 dias: \" << average_last_year << std::endl;\n",
+        "    std::cout << \"Menor preço total: \" << min_price_total << std::endl;\n",
+        "    std::cout << \"Maior preço total: \" << max_price_total << std::endl;\n",
+        "    std::cout << \"Menor preço dos últimos 365 dias: \" << min_price_last_year << std::endl;\n",
+        "    std::cout << \"Maior preço dos últimos 365 dias: \" << max_price_last_year << std::endl;\n",
+        "\n",
+        "    return 0;\n",
+        "}\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "Wps6eRGOZFcE",
+        "outputId": "4958634d-0bbd-49c9-cba4-f75dcab6c491"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Writing stocks_reductions.cu\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "!nvcc -arch=sm_70 -std=c++14 stocks_reductions.cu -o stocks_reductions\n"
+      ],
+      "metadata": {
+        "id": "ljO2PdYhZZgA"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "!./stocks_reductions < stocks_supercomp.txt\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "VQgN0WJJZbZv",
+        "outputId": "b54417eb-dd00-4796-e433-9ae6e9f5b177"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Dados lidos: 389 registros.\n",
+            "Média total dos preços: 1580.08\n",
+            "Média dos últimos 365 dias: 1615.81\n",
+            "Menor preço total: 1015.24\n",
+            "Maior preço total: 2200\n",
+            "Menor preço dos últimos 365 dias: 1060.5\n",
+            "Maior preço dos últimos 365 dias: 2200\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "%%writefile stocks_difference.cu\n",
+        "#include <thrust/host_vector.h>\n",
+        "#include <thrust/device_vector.h>\n",
+        "#include <thrust/transform.h>\n",
+        "#include <thrust/reduce.h>\n",
+        "#include <iostream>\n",
+        "#include <sstream>\n",
+        "#include <chrono>\n",
+        "\n",
+        "struct diff_functor {\n",
+        "    __host__ __device__\n",
+        "    float operator()(const float& a, const float& b) const {\n",
+        "        return a - b;\n",
+        "    }\n",
+        "};\n",
+        "\n",
+        "int main() {\n",
+        "    // Vetores no host (CPU) para armazenar os preços da Apple e Microsoft\n",
+        "    thrust::host_vector<float> host_data_aapl;\n",
+        "    thrust::host_vector<float> host_data_msft;\n",
+        "\n",
+        "    // Variáveis para armazenar os preços lidos\n",
+        "    float price_aapl, price_msft;\n",
+        "    std::string line;\n",
+        "\n",
+        "    // Ler os dados do arquivo de entrada redirecionado (e.g., stocks2.txt)\n",
+        "    while (std::getline(std::cin, line)) {\n",
+        "        std::stringstream ss(line);\n",
+        "        char comma;\n",
+        "        ss >> price_aapl >> comma >> price_msft;\n",
+        "\n",
+        "        // Adicionar os preços aos vetores do host\n",
+        "        host_data_aapl.push_back(price_aapl);\n",
+        "        host_data_msft.push_back(price_msft);\n",
+        "    }\n",
+        "\n",
+        "    std::cout << \"Dados lidos: \" << host_data_aapl.size() << \" registros.\" << std::endl;\n",
+        "\n",
+        "    // Transferir os dados para a GPU\n",
+        "    thrust::device_vector<float> device_data_aapl = host_data_aapl;\n",
+        "    thrust::device_vector<float> device_data_msft = host_data_msft;\n",
+        "\n",
+        "    // Criar um vetor na GPU para armazenar as diferenças\n",
+        "    thrust::device_vector<float> device_diff(device_data_aapl.size());\n",
+        "\n",
+        "    // Calcular a diferença ponto a ponto entre os preços da Apple e Microsoft\n",
+        "    thrust::transform(device_data_aapl.begin(), device_data_aapl.end(),\n",
+        "                      device_data_msft.begin(), device_diff.begin(),\n",
+        "                      diff_functor());\n",
+        "\n",
+        "    // Calcular a soma das diferenças\n",
+        "    float sum_diff = thrust::reduce(device_diff.begin(), device_diff.end(), 0.0f);\n",
+        "\n",
+        "    // Calcular a média das diferenças\n",
+        "    float average_diff = sum_diff / device_diff.size();\n",
+        "\n",
+        "    // Exibir o resultado\n",
+        "    std::cout << \"Média das diferenças de preço entre AAPL e MSFT: \" << average_diff << std::endl;\n",
+        "\n",
+        "    return 0;\n",
+        "}\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "iriFNX4naPaT",
+        "outputId": "e1392640-b05b-46c5-fd7e-4dd7216ec1ec"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Writing stocks_difference.cu\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "!nvcc -arch=sm_70 -std=c++14 stocks_difference.cu -o stocks_difference\n"
+      ],
+      "metadata": {
+        "id": "RjiB7_10aRZb"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "!./stocks_difference < stocks2.txt\n"
+      ],
+      "metadata": {
+        "id": "f6_qfXi5aTfN",
+        "outputId": "d8fca416-adcd-4744-aea4-cf1058884cef",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Dados lidos: 3520 registros.\n",
+            "Média das diferenças de preço entre AAPL e MSFT: -265.232\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "%%writefile stocks_analysis.cu\n",
+        "#include <thrust/host_vector.h>\n",
+        "#include <thrust/device_vector.h>\n",
+        "#include <thrust/transform.h>\n",
+        "#include <thrust/reduce.h>\n",
+        "#include <thrust/count.h>\n",
+        "#include <thrust/iterator/constant_iterator.h>\n",
+        "#include <thrust/functional.h>\n",
+        "#include <thrust/replace.h>\n",
+        "#include <iostream>\n",
+        "#include <cmath>\n",
+        "\n",
+        "// Functor para calcular o quadrado das diferenças para a variância\n",
+        "struct variance_functor {\n",
+        "    float mean;\n",
+        "    variance_functor(float _mean) : mean(_mean) {}\n",
+        "\n",
+        "    __host__ __device__\n",
+        "    float operator()(const float& x) const {\n",
+        "        return (x - mean) * (x - mean);\n",
+        "    }\n",
+        "};\n",
+        "\n",
+        "// Functor para calcular as diferenças entre dias consecutivos\n",
+        "struct diff_functor {\n",
+        "    __host__ __device__\n",
+        "    float operator()(const float& x1, const float& x2) const {\n",
+        "        return x2 - x1;\n",
+        "    }\n",
+        "};\n",
+        "\n",
+        "// Functor para contar aumentos (dias em que houve aumento)\n",
+        "struct positive_functor {\n",
+        "    __host__ __device__\n",
+        "    bool operator()(const float& x) const {\n",
+        "        return x > 0.0f;\n",
+        "    }\n",
+        "};\n",
+        "\n",
+        "int main() {\n",
+        "    // Vetor no host (CPU)\n",
+        "    thrust::host_vector<float> host_data;\n",
+        "    float price;\n",
+        "\n",
+        "    // Ler os dados do arquivo de entrada redirecionado (e.g., stocks-google.txt)\n",
+        "    while (std::cin >> price) {\n",
+        "        host_data.push_back(price);\n",
+        "    }\n",
+        "\n",
+        "    std::cout << \"Dados lidos: \" << host_data.size() << \" registros.\" << std::endl;\n",
+        "\n",
+        "    // Transferir os dados para a GPU\n",
+        "    thrust::device_vector<float> device_data = host_data;\n",
+        "\n",
+        "    // Calcular a média dos preços das ações\n",
+        "    float sum_total = thrust::reduce(device_data.begin(), device_data.end(), 0.0f);\n",
+        "    float mean = sum_total / device_data.size();\n",
+        "    std::cout << \"Média dos preços: \" << mean << std::endl;\n",
+        "\n",
+        "    // Calcular a variância usando thrust::constant_iterator para a média\n",
+        "    thrust::constant_iterator<float> mean_iter(mean);\n",
+        "    float variance = thrust::transform_reduce(\n",
+        "        device_data.begin(), device_data.end(),\n",
+        "        variance_functor(mean), 0.0f, thrust::plus<float>()\n",
+        "    );\n",
+        "    variance /= device_data.size();\n",
+        "    std::cout << \"Variância dos preços: \" << variance << std::endl;\n",
+        "\n",
+        "    // Calcular as diferenças diárias\n",
+        "    thrust::device_vector<float> ganho_diario(device_data.size() - 1);\n",
+        "    thrust::transform(device_data.begin(), device_data.end() - 1,\n",
+        "                      device_data.begin() + 1, ganho_diario.begin(),\n",
+        "                      diff_functor());\n",
+        "\n",
+        "    // Contar quantos dias o preço subiu\n",
+        "    int dias_com_aumento = thrust::count_if(ganho_diario.begin(), ganho_diario.end(), positive_functor());\n",
+        "    std::cout << \"Dias com aumento no preço: \" << dias_com_aumento << std::endl;\n",
+        "\n",
+        "    // Substituir valores negativos de ganho_diario por zero\n",
+        "    thrust::replace_if(ganho_diario.begin(), ganho_diario.end(), thrust::placeholders::_1 < 0.0f, 0.0f);\n",
+        "\n",
+        "    // Calcular o aumento total e a média dos dias com aumento\n",
+        "    float aumento_total = thrust::reduce(ganho_diario.begin(), ganho_diario.end(), 0.0f);\n",
+        "    float aumento_medio = dias_com_aumento > 0 ? aumento_total / dias_com_aumento : 0.0f;\n",
+        "    std::cout << \"Aumento médio nos dias em que o preço subiu: \" << aumento_medio << std::endl;\n",
+        "\n",
+        "    return 0;\n",
+        "}\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "GKnmJdg6QQgX",
+        "outputId": "f36fd2ca-038a-4b81-9161-552ee4ce74fc"
+      },
+      "execution_count": 1,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Writing stocks_analysis.cu\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "!nvcc -arch=sm_70 -std=c++14 stocks_analysis.cu -o stocks_analysis\n"
+      ],
+      "metadata": {
+        "id": "8L6ERrcBQUh0"
+      },
+      "execution_count": 2,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "!./stocks_analysis < stocks_supercomp.txt\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "k6aDCw_NQWSl",
+        "outputId": "4171e2ea-7a9d-42b2-d605-47ef514bff3c"
+      },
+      "execution_count": 4,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Dados lidos: 389 registros.\n",
+            "Média dos preços: 1580.08\n",
+            "Variância dos preços: 123792\n",
+            "Dias com aumento no preço: 382\n",
+            "Aumento médio nos dias em que o preço subiu: 3.15251\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "1. Cálculo da Variância: O uso de iteradores dinâmicos com thrust::constant_iterator evitou a necessidade de alocar mais memória para o cálculo da variância. Isso otimizou o uso de recursos e melhorou a eficiência, já que a GPU processa os dados em paralelo.\n",
+        "\n",
+        "2. Diferenças Diárias: A operação thrust::transform foi usada para calcular as variações diárias entre os preços das ações de forma paralela. Isso aproveitou a capacidade da GPU de processar várias operações simultaneamente, acelerando a execução em comparação com a CPU.\n",
+        "\n",
+        "3. Contagem de Aumentos e Aumento Médio: Usamos thrust::count_if e thrust::replace_if para contar os dias de aumento e calcular a média dos aumentos, respectivamente. Essas operações também se beneficiaram do paralelismo da GPU, garantindo uma execução mais rápida."
+      ],
+      "metadata": {
+        "id": "rssf9U6uQ_pm"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [],
+      "metadata": {
+        "id": "TcNTduoLRAQD"
+      },
+      "execution_count": null,
+      "outputs": []
+    }
+  ]
+}
