@@ -1,0 +1,9 @@
+Execução 1:
+Tempo de execução: 0.00012557 segundos
+=====================
+Execução 2:
+Tempo de execução: 1.52104e-05 segundos
+=====================
+Execução 3:
+Tempo de execução: 1.55587e-05 segundos
+=====================

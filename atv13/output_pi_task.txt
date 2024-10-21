@@ -1,0 +1,15 @@
+Execução 1:
+MIN_BLK: 67108864, Pi: 3.14159265361812, Tempo de execução: 41.9781310101971 segundos
+MIN_BLK: 134217728, Pi: 3.14159265359973, Tempo de execução: 41.1195636633784 segundos
+MIN_BLK: 268435456, Pi: 3.14159265359992, Tempo de execução: 41.2367300773039 segundos
+=====================
+Execução 2:
+MIN_BLK: 67108864, Pi: 3.14159265359973, Tempo de execução: 38.4278603438288 segundos
+MIN_BLK: 134217728, Pi: 3.14159265359969, Tempo de execução: 47.1094554075971 segundos
+MIN_BLK: 268435456, Pi: 3.14159265359991, Tempo de execução: 43.250024321489 segundos
+=====================
+Execução 3:
+MIN_BLK: 67108864, Pi: 3.1415926536182, Tempo de execução: 46.6686531500891 segundos
+MIN_BLK: 134217728, Pi: 3.14159265361785, Tempo de execução: 35.3862774958834 segundos
+MIN_BLK: 268435456, Pi: 3.14159265359999, Tempo de execução: 49.5340795218945 segundos
+=====================

@@ -1,0 +1,28 @@
+schedule(static):      
+****************                                                
+                ****************                                
+                                ****************                
+                                                ****************
+
+Tempo de execução para schedule(static):      : 0.000178463 segundos
+schedule(dynamic):     
+*   *    *  **   ** * *   ** *  ** *  *  *   *  *  *   *  ** *  
+   *   *      *                   *  *  * *      *  *         * 
+ *   *  *  *   *     * *    *  *       *    *  *      *  *      
+  *   *   *     *  *    **    *     *      *  *   *  *  *   *  *
+
+Tempo de execução para schedule(dynamic):     : 5.88689e-06 segundos
+schedule(guided):      
+                            *********            ****   **  * * 
+                ************                                    
+****************                                     ***        
+                                     ************         ** * *
+
+Tempo de execução para schedule(guided):      : 4.21237e-06 segundos
+schedule(auto):        
+****************                                                
+                ****************                                
+                                ****************                
+                                                ****************
+
+Tempo de execução para schedule(auto):        : 2.64868e-06 segundos

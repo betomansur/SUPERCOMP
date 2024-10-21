@@ -1,0 +1,35 @@
+Execução 1:
+MIN_BLK: 67108864, Pi: 3.14159265358979, Tempo de execução: 1.07811696734279 segundos
+MIN_BLK: 134217728, Pi: 3.14159265358979, Tempo de execução: 1.07784936390817 segundos
+MIN_BLK: 268435456, Pi: 3.14159265358979, Tempo de execução: 1.07857606653124 segundos
+MIN_BLK: 536870912, Pi: 3.14159265358977, Tempo de execução: 1.07825381495059 segundos
+MIN_BLK: 1073741824, Pi: 3.14159265358983, Tempo de execução: 1.08452547714114 segundos
+=====================
+Execução 2:
+MIN_BLK: 67108864, Pi: 3.14159265358979, Tempo de execução: 1.07795066665858 segundos
+MIN_BLK: 134217728, Pi: 3.14159265358979, Tempo de execução: 1.07787238620222 segundos
+MIN_BLK: 268435456, Pi: 3.14159265358979, Tempo de execução: 1.07850389555097 segundos
+MIN_BLK: 536870912, Pi: 3.14159265358977, Tempo de execução: 1.07822741009295 segundos
+MIN_BLK: 1073741824, Pi: 3.14159265358983, Tempo de execução: 1.07795430440456 segundos
+=====================
+Execução 3:
+MIN_BLK: 67108864, Pi: 3.14159265358979, Tempo de execução: 1.07794282212853 segundos
+MIN_BLK: 134217728, Pi: 3.14159265358979, Tempo de execução: 1.07792287599295 segundos
+MIN_BLK: 268435456, Pi: 3.14159265358979, Tempo de execução: 1.07858282327652 segundos
+MIN_BLK: 536870912, Pi: 3.14159265358977, Tempo de execução: 1.07825013995171 segundos
+MIN_BLK: 1073741824, Pi: 3.14159265358983, Tempo de execução: 1.07795393280685 segundos
+=====================
+Execução 4:
+MIN_BLK: 67108864, Pi: 3.14159265358979, Tempo de execução: 1.08027508947998 segundos
+MIN_BLK: 134217728, Pi: 3.14159265358979, Tempo de execução: 1.07785234972835 segundos
+MIN_BLK: 268435456, Pi: 3.14159265358979, Tempo de execução: 1.07857114449143 segundos
+MIN_BLK: 536870912, Pi: 3.14159265358977, Tempo de execução: 1.07822762615979 segundos
+MIN_BLK: 1073741824, Pi: 3.14159265358983, Tempo de execução: 1.07794557604939 segundos
+=====================
+Execução 5:
+MIN_BLK: 67108864, Pi: 3.14159265358979, Tempo de execução: 1.07793749403208 segundos
+MIN_BLK: 134217728, Pi: 3.14159265358979, Tempo de execução: 1.07784032262862 segundos
+MIN_BLK: 268435456, Pi: 3.14159265358979, Tempo de execução: 1.07849292457104 segundos
+MIN_BLK: 536870912, Pi: 3.14159265358977, Tempo de execução: 1.07817683275789 segundos
+MIN_BLK: 1073741824, Pi: 3.14159265358983, Tempo de execução: 1.07798959966749 segundos
+=====================

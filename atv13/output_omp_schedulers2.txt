@@ -1,0 +1,108 @@
+Teste 1 com schedule(static)
+schedule(static):      
+****************                                                
+                ****************                                
+                                ****************                
+                                                ****************
+
+Tempo de execução para schedule(static):      : 0.000173963 segundos
+====================
+Teste 2 com schedule(static)
+schedule(static):      
+****************                                                
+                ****************                                
+                                ****************                
+                                                ****************
+
+Tempo de execução para schedule(static):      : 3.02773e-06 segundos
+====================
+Teste 3 com schedule(static)
+schedule(static):      
+****************                                                
+                ****************                                
+                                ****************                
+                                                ****************
+
+Tempo de execução para schedule(static):      : 3.01376e-06 segundos
+====================
+Teste 1 com schedule(dynamic)
+schedule(dynamic):     
+*   *  *   **   * * **       * * *   *    *    *  * *          *
+  *   *   *  *   *      *   *       *  *        *    *      *   
+   *    *          *       *  *         *    *   * *            
+ *   *   *    **      ** **     * **  *  * ** *       ****** ** 
+
+Tempo de execução para schedule(dynamic):     : 6.06012e-06 segundos
+====================
+Teste 2 com schedule(dynamic)
+schedule(dynamic):     
+*   *   *   **     ** *  *     *   ** *   *   *     *    *  * * 
+  *  *   *    *   *       * *   * *          * *   *    *  *   *
+ *    *    *     *   *     *  *      *   *        *   *   *  *  
+   *   *  *    **      **    *   *     **  **   **   * *        
+
+Tempo de execução para schedule(dynamic):     : 5.14649e-06 segundos
+====================
+Teste 3 com schedule(dynamic)
+schedule(dynamic):     
+   *  *  *    **    *  *    *  *       *    ** ****    *        
+  *    *     *  *       *       *   * *   *         *      * *  
+*   *       *    *       *       *   *     *  *         *   *   
+ *   *  * **      ** **   ** **   **    **         * **  **   **
+
+Tempo de execução para schedule(dynamic):     : 4.79817e-06 segundos
+====================
+Teste 1 com schedule(guided)
+schedule(guided):      
+                                     *******         ***        
+****************                            *****               
+                            *********                   **  *** 
+                ************                     ****     **   *
+
+Tempo de execução para schedule(guided):      : 4.65661e-06 segundos
+====================
+Teste 2 com schedule(guided)
+schedule(guided):      
+****************                                          **  * 
+                ************                                ** *
+                                     ************               
+                            *********            *********      
+
+Tempo de execução para schedule(guided):      : 3.72063e-06 segundos
+====================
+Teste 3 com schedule(guided)
+schedule(guided):      
+                                     ************              *
+                ************                         ***    *   
+                            *********                     **  * 
+****************                                 ****   **   *  
+
+Tempo de execução para schedule(guided):      : 3.15346e-06 segundos
+====================
+Teste 1 com schedule(auto)
+schedule(auto):        
+****************                                                
+                ****************                                
+                                ****************                
+                                                ****************
+
+Tempo de execução para schedule(auto):        : 2.89828e-06 segundos
+====================
+Teste 2 com schedule(auto)
+schedule(auto):        
+****************                                                
+                ****************                                
+                                ****************                
+                                                ****************
+
+Tempo de execução para schedule(auto):        : 2.63285e-06 segundos
+====================
+Teste 3 com schedule(auto)
+schedule(auto):        
+****************                                                
+                ****************                                
+                                ****************                
+                                                ****************
+
+Tempo de execução para schedule(auto):        : 2.5779e-06 segundos
+====================
