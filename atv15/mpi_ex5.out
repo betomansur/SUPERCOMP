@@ -1,0 +1,5 @@
+Processo 1 recebeu soma parcial e adicionou seu valor (2): Total até agora = 3
+Processo 0 iniciou com valor: 1
+Processo 2 recebeu soma parcial e adicionou seu valor (3): Total até agora = 6
+Processo 3 recebeu soma parcial e adicionou seu valor (4): Total até agora = 10
+Processo 3 finalizou a soma total: 10
